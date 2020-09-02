@@ -5,7 +5,7 @@ workflows:
       vars:
         GRADLE_PATH: /Users/builder/programs/gradle-5.6.4/bin
     scripts:
-     - sudo npm install -g cordova
+     - sudo npm install -g ionic
      - npm install
-     - cordova platform add android
-     - PATH=$PATH:$GRADLE_PATH cordova build android
+     - ionic cordova prepare android
+     - PATH=$PATH:$GRADLE_PATH ionic cordova build android
