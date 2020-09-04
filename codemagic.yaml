@@ -1,11 +1,27 @@
+# Check out https://docs.codemagic.io/yaml/building-a-react-native-app/ for more information
+# Please review and update values in curly braces
+
 workflows:
-  cordova:
-    name: Apache Cordova
-    environment:
-      vars:
-        GRADLE_PATH: /Users/builder/programs/gradle-5.6.4/bin
-    scripts:
-     - sudo npm install -g ionic
-     - npm install
-     - ionic cordova prepare android
-     - PATH=$PATH:$GRADLE_PATH ionic cordova build android
+    react-native:
+        name: React Native App
+#        environment:
+#            vars:
+#                XCODE_WORKSPACE: "{{ ADD WORKSPACE NAME HERE }}"
+#                XCODE_SCHEME: "{{ ADD SCHEME NAME HERE }}"
+#            node: latest
+        scripts:
+            - npm install
+            - echo "sdk.dir=$HOME/programs/android-sdk-macosx" > "$FCI_BUILD_DIR/android/local.properties"
+            - |
+                ionic cordova build Android
+                cd platforms/android
+                ./gradlew assembleDebug
+            - |
+                # build iOS
+                cd ios
+                pod install
+                xcodebuild build -workspace "$XCODE_WORKSPACE.xcworkspace" -scheme "$XCODE_SCHEME" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        artifacts:
+            - android/app/build/outputs/**/*.apk
+            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+            - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
