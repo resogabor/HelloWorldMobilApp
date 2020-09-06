@@ -13,7 +13,7 @@ workflows:
             - npm install
 #            - echo "sdk.dir=$HOME/programs/android-sdk-macosx" > "$FCI_BUILD_DIR/android/local.properties"
             - |
-                ionic cordova build Android
+                ionic cordova build android
                 cd platforms/android
                 ./gradlew assembleDebug
 #            - |
